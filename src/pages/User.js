@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 
 const User = () => {
   const [localUsers, setUsers] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
 
   useEffect(() => {
     setUsers(users);
@@ -15,11 +16,14 @@ const User = () => {
   const handleSearchData = (data) => {
     if (data !== '') {
       const aux = users.filter((user) => user.name.toLowerCase().match(data));
-      console.log(aux);
       setUsers(aux);
     } else {
       setUsers(users);
     }
+  };
+
+  const handleSelectedUsers = (newSelectedUsers) => {
+    setSelectedUsers(newSelectedUsers);
   };
 
   return (
@@ -35,9 +39,9 @@ const User = () => {
         }}
       >
         <Container maxWidth={false}>
-          <AccountListToolbar handleSearchData={handleSearchData} />
+          <AccountListToolbar handleSearchData={handleSearchData} handleSelectedUsers={selectedUsers} />
           <Box sx={{ pt: 3 }}>
-            <AccountListResults users={localUsers} />
+            <AccountListResults users={localUsers} handleSelectedUsers={handleSelectedUsers} />
           </Box>
         </Container>
       </Box>

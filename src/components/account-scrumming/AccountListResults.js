@@ -17,7 +17,7 @@ import {
 } from '@material-ui/core';
 import getInitials from 'src/utils/getInitials';
 
-const AccountListResults = ({ users, ...rest }) => {
+const AccountListResults = ({ users, handleSelectedUsers, ...rest }) => {
   const [selectedUsersIds, setSelectedUsersIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -31,6 +31,7 @@ const AccountListResults = ({ users, ...rest }) => {
       newSelectedUsersIds = [];
     }
 
+    handleSelectedUsers(newSelectedUsersIds);
     setSelectedUsersIds(newSelectedUsersIds);
   };
 
@@ -50,7 +51,7 @@ const AccountListResults = ({ users, ...rest }) => {
         selectedUsersIds.slice(selectedIndex + 1)
       );
     }
-
+    handleSelectedUsers(newSelectedUsersIds);
     setSelectedUsersIds(newSelectedUsersIds);
   };
 
@@ -152,7 +153,8 @@ const AccountListResults = ({ users, ...rest }) => {
 };
 
 AccountListResults.propTypes = {
-  users: PropTypes.array.isRequired
+  users: PropTypes.array.isRequired,
+  handleSelectedUsers: PropTypes.func.isRequired,
 };
 
 export default AccountListResults;

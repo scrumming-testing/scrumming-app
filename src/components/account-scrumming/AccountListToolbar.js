@@ -15,10 +15,28 @@ import CreateForm from './CreateForm';
 
 const AccountListToolbar = (props) => {
   const [dialog, setDialog] = useState(null);
+  const [disableDelete, setDisableDelete] = useState(true);
+  const [disableUpdate, setDisableUpdate] = useState(true);
+
+  const { handleSearchData, handleSelectedUsers } = props;
 
   useEffect(() => {
     setDialog(null);
   }, []);
+
+  useEffect(() => {
+    if (handleSelectedUsers.length === 1) {
+      setDisableUpdate(false);
+    } else {
+      setDisableUpdate(true);
+    }
+
+    if (handleSelectedUsers.length > 0) {
+      setDisableDelete(false);
+    } else {
+      setDisableDelete(true);
+    }
+  }, [handleSelectedUsers]);
 
   const unmountDialog = () => {
     setDialog(null);
@@ -45,6 +63,7 @@ const AccountListToolbar = (props) => {
             mx: 1
           }}
           variant="contained"
+          disabled={disableDelete}
         >
           Delete
         </Button>
@@ -56,6 +75,7 @@ const AccountListToolbar = (props) => {
             mx: 1
           }}
           variant="contained"
+          disabled={disableUpdate}
         >
           Update
         </Button>
@@ -87,7 +107,7 @@ const AccountListToolbar = (props) => {
                 }}
                 placeholder="Search User"
                 variant="outlined"
-                onChange={(e) => props.handleSearchData(e.target.value)}
+                onChange={(e) => handleSearchData(e.target.value)}
               />
             </Box>
           </CardContent>
@@ -98,7 +118,8 @@ const AccountListToolbar = (props) => {
 };
 
 AccountListToolbar.propTypes = {
-  handleSearchData: PropTypes.func.isRequired
+  handleSearchData: PropTypes.func.isRequired,
+  handleSelectedUsers: PropTypes.array.isRequired,
 };
 
 export default AccountListToolbar;
