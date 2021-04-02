@@ -102,7 +102,7 @@ const OrganizationListToolbar = (props) => {
           variant="contained"
           onClick={openCreateDialog}
         >
-          Add account
+          Add organization
         </Button>
       </Box>
       <Box sx={{ mt: 3 }}>
