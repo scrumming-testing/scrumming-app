@@ -13,6 +13,7 @@ import { Search as SearchIcon } from 'react-feather';
 import { useEffect, useState } from 'react';
 import CreateForm from './CreateForm';
 import UpdateForm from './UpdateForm';
+import DeleteForm from './DeleteForm';
 
 const AccountListToolbar = (props) => {
   const [dialog, setDialog] = useState(null);
@@ -53,6 +54,12 @@ const AccountListToolbar = (props) => {
     setDialog(<UpdateForm formClosed={unmountDialog} userId={usersIDs[0]} />);
   };
 
+  const openDeleteDialog = () => {
+    console.log('PASSING IDs');
+    console.log(usersIDs);
+    setDialog(<DeleteForm formClosed={unmountDialog} userIds={usersIDs} />);
+  };
+
   return (
     <Box {...props}>
       {dialog}
@@ -71,6 +78,7 @@ const AccountListToolbar = (props) => {
           }}
           variant="contained"
           disabled={disableDelete}
+          onClick={openDeleteDialog}
         >
           Delete
         </Button>
