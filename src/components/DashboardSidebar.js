@@ -51,6 +51,11 @@ const items = [
     title: 'Account'
   },
   {
+    href: '/app/users',
+    icon: UserIcon,
+    title: 'Account Scrumming'
+  },
+  {
     href: '/app/settings',
     icon: SettingsIcon,
     title: 'Settings'
