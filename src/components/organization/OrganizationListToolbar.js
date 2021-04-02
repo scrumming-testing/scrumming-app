@@ -13,7 +13,7 @@ import { Search as SearchIcon } from 'react-feather';
 import { useEffect, useState } from 'react';
 import CreateForm from './CreateForm';
 import UpdateForm from './UpdateForm';
-// import DeleteForm from './DeleteForm';
+import DeleteForm from './DeleteForm';
 
 const OrganizationListToolbar = (props) => {
   const [dialog, setDialog] = useState(null);
@@ -59,7 +59,7 @@ const OrganizationListToolbar = (props) => {
   const openDeleteDialog = () => {
     console.log('PASSING IDs');
     console.log(elementsIDs);
-    // setDialog(<DeleteForm formClosed={unmountDialog} userIds={elementsIDs} />);
+    setDialog(<DeleteForm formClosed={unmountDialog} dataIds={elementsIDs} />);
   };
 
   return (

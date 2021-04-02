@@ -85,7 +85,7 @@ const OrganizationListResults = ({ data, handleSelectedData, ...rest }) => {
                   Name
                 </TableCell>
                 <TableCell>
-                  Email
+                  Owner
                 </TableCell>
                 <TableCell>
                   Registration date

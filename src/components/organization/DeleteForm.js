@@ -53,7 +53,7 @@ export default function DeleteForm({ formClosed, dataIds }) {
   }, []);
 
   const deleteElements = () => {
-    console.log('[+] DELETE USER');
+    console.log('[+] DELETE ORGANIZATIONS');
     console.log(elementsToDelete);
   };
 
@@ -72,7 +72,7 @@ export default function DeleteForm({ formClosed, dataIds }) {
     >
       <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
         <DialogContentText>
-          Are you sure you want to delete these users?
+          Are you sure you want to delete these organizations?
         </DialogContentText>
       </DialogTitle>
       <DialogContent>
@@ -83,9 +83,9 @@ export default function DeleteForm({ formClosed, dataIds }) {
                 src={e.avatarUrl}
                 sx={{ mr: 2 }}
               >
-                {getInitials(user.name)}
+                {getInitials(e.name)}
               </Avatar>
-              <ListItemText primary={`Owner ${e.owner}`} secondary={``} />
+              <ListItemText primary={`Owner : ${e.owner}`} secondary={`useful data ${e.owner}`} />
             </ListItem>
           ))}
         </List>
@@ -104,5 +104,5 @@ export default function DeleteForm({ formClosed, dataIds }) {
 
 DeleteForm.propTypes = {
   formClosed: PropTypes.func.isRequired,
-  userIds: PropTypes.string.isRequired,
+  dataIds: PropTypes.string.isRequired,
 };
