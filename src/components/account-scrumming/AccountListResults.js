@@ -117,13 +117,13 @@ const AccountListResults = ({ users, handleSelectedUsers, ...rest }) => {
                         src={user.avatarUrl}
                         sx={{ mr: 2 }}
                       >
-                        {getInitials(user.name)}
+                        {getInitials(user.firstName)}
                       </Avatar>
                       <Typography
                         color="textPrimary"
                         variant="body1"
                       >
-                        {user.name}
+                        {`${user.firstName} ${user.lastName}`}
                       </Typography>
                     </Box>
                   </TableCell>

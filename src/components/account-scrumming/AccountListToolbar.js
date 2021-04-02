@@ -12,11 +12,13 @@ import { orange, red } from '@material-ui/core/colors';
 import { Search as SearchIcon } from 'react-feather';
 import { useEffect, useState } from 'react';
 import CreateForm from './CreateForm';
+import UpdateForm from './UpdateForm';
 
 const AccountListToolbar = (props) => {
   const [dialog, setDialog] = useState(null);
   const [disableDelete, setDisableDelete] = useState(true);
   const [disableUpdate, setDisableUpdate] = useState(true);
+  const [usersIDs, setUsersIDs] = useState([]);
 
   const { handleSearchData, handleSelectedUsers } = props;
 
@@ -36,6 +38,7 @@ const AccountListToolbar = (props) => {
     } else {
       setDisableDelete(true);
     }
+    setUsersIDs(handleSelectedUsers);
   }, [handleSelectedUsers]);
 
   const unmountDialog = () => {
@@ -44,6 +47,10 @@ const AccountListToolbar = (props) => {
 
   const openCreateDialog = () => {
     setDialog(<CreateForm formClosed={unmountDialog} />);
+  };
+
+  const openUpdateDialog = () => {
+    setDialog(<UpdateForm formClosed={unmountDialog} userId={usersIDs[0]} />);
   };
 
   return (
@@ -76,6 +83,7 @@ const AccountListToolbar = (props) => {
           }}
           variant="contained"
           disabled={disableUpdate}
+          onClick={openUpdateDialog}
         >
           Update
         </Button>

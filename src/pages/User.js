@@ -15,7 +15,10 @@ const User = () => {
 
   const handleSearchData = (data) => {
     if (data !== '') {
-      const aux = users.filter((user) => user.name.toLowerCase().match(data));
+      const aux = users.filter((user) => {
+        const name = `${user.firstName} ${user.lastName}`;
+        return name.toLowerCase().match(data);
+      });
       setUsers(aux);
     } else {
       setUsers(users);

@@ -21,6 +21,7 @@ import Draggable from 'react-draggable';
 import { PhotoCamera } from '@material-ui/icons';
 
 import roles from '../../__mocks__/roles';
+import users from '../../__mocks__/users';
 
 function PaperComponent(props) {
   return (
@@ -33,21 +34,45 @@ function PaperComponent(props) {
   );
 }
 
-export default function CreateForm({ formClosed }) {
+export default function UpdateForm({ formClosed, userId }) {
   const [rolesData, setRolesData] = useState([]);
   const [values, setValues] = React.useState({
     firstName: '',
     lastName: '',
     email: '',
-    role: ''
+    role: '',
+    id: '',
   });
   const [open, setOpen] = useState(true);
   const [profileImage, setProfileImage] = useState('');
 
   useEffect(() => {
-    console.log('Dialog Create Opened');
+    console.log('Dialog Update Opened');
     console.log('Fetching Roles');
     setRolesData(roles);
+
+    console.log('Fetching User Data');
+    const user = users.find((usr) => usr.id === userId);
+    if (user !== undefined) {
+      console.log('Found user');
+      console.log(user);
+      setValues((prevState) => {
+        const userData = { ...prevState };
+        userData.firstName = user.firstName;
+        userData.lastName = user.lastName;
+        userData.email = user.email;
+        userData.role = '';
+        userData.id = user.id;
+        return { ...userData };
+      });
+      setProfileImage(user.avatarUrl);
+      /* const reader = new FileReader();
+      reader.onloadend = () => {
+        console.log(reader);
+        setProfileImage(reader.result);
+      };
+      reader.readAsDataURL(user.avatarUrl); */
+    }
   }, []);
 
   const handleClose = () => {
@@ -55,8 +80,8 @@ export default function CreateForm({ formClosed }) {
     formClosed(true);
   };
 
-  const createUser = () => {
-    console.log('[+] CREATING USER');
+  const updateUser = () => {
+    console.log('[+] UPDATING USER');
     console.log(values);
     console.log(profileImage);
   };
@@ -91,14 +116,15 @@ export default function CreateForm({ formClosed }) {
       onClose={handleClose}
       PaperComponent={PaperComponent}
       aria-labelledby="draggable-dialog-title"
+      className="CustomDialog"
     >
       <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
         <DialogContentText>
-          You are creating an user
+          You are updating an user
         </DialogContentText>
       </DialogTitle>
       <DialogContent>
-        <Stack direction="row" alignItems="center" spacing={1}>
+        <Stack direction="row" alignContent="center" alignItems="center" spacing={1}>
           <Avatar
             src={profileImage}
             sx={{
@@ -161,14 +187,15 @@ export default function CreateForm({ formClosed }) {
         <Button autoFocus onClick={handleClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={createUser} color="primary">
-          Create
+        <Button onClick={updateUser} color="primary">
+          Update
         </Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-CreateForm.propTypes = {
+UpdateForm.propTypes = {
   formClosed: PropTypes.func.isRequired,
+  userId: PropTypes.string.isRequired,
 };
