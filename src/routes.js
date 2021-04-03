@@ -10,6 +10,7 @@ import ProductList from 'src/pages/ProductList';
 import Register from 'src/pages/Register';
 import Settings from 'src/pages/Settings';
 import User from 'src/pages/User';
+import Roles from './pages/Roles';
 
 const routes = [
   {
@@ -22,6 +23,7 @@ const routes = [
       { path: 'products', element: <ProductList /> },
       { path: 'settings', element: <Settings /> },
       { path: 'users', element: <User /> },
+      { path: 'roles', element: <Roles /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
