@@ -7,19 +7,21 @@ import { useEffect, useState } from 'react';
 
 const Organizations = () => {
   const [localOrganizations, setOrganizations] = useState([]);
+  const [originalOrganizations, setOriginalLocalOrganizations] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
 
   useEffect(() => {
     setOrganizations(organizations);
+    setOriginalLocalOrganizations(organizations);
   }, []);
 
   const handleSearchData = (data) => {
     if (data !== '') {
-      const aux = organizations.filter((organization) => organization.name.toLowerCase().match(data));
+      const aux = originalOrganizations.filter((organization) => organization.name.toLowerCase().match(data));
       console.log(aux);
       setOrganizations(aux);
     } else {
-      setOrganizations(organizations);
+      setOrganizations(originalOrganizations);
     }
   };
 

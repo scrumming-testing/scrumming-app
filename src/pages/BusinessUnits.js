@@ -11,19 +11,21 @@ const BusinessUnits = () => {
   const { organizationID } = useParams();
 
   const [localBusinessUnits, setLocalBusinessUnits] = useState([]);
+  const [originalBusinessUnits, setOriginalLocalBusinessUnits] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
 
   useEffect(() => {
     const aux = businessUnits.filter((unit) => unit.organization === organizationID);
     setLocalBusinessUnits(aux);
+    setOriginalLocalBusinessUnits(aux);
   }, []);
 
   const handleSearchData = (data) => {
     if (data !== '') {
-      const aux = businessUnits.filter((unit) => unit.name.toLowerCase().match(data));
+      const aux = originalBusinessUnits.filter((unit) => unit.name.toLowerCase().match(data));
       setLocalBusinessUnits(aux);
     } else {
-      setLocalBusinessUnits(businessUnits);
+      setLocalBusinessUnits(originalBusinessUnits);
     }
   };
 

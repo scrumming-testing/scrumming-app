@@ -9,6 +9,7 @@ import sites from '../__mocks__/sites';
 
 const Sites = () => {
   const { businessUnitID } = useParams();
+  const [originalSites, setOriginalLocalSites] = useState([]);
 
   const [localSites, setLocalSites] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
@@ -18,14 +19,15 @@ const Sites = () => {
     console.log(businessUnitID);
     const aux = sites.filter((site) => site.businessUnit === businessUnitID);
     setLocalSites(aux);
+    setOriginalLocalSites(aux);
   }, []);
 
   const handleSearchData = (data) => {
     if (data !== '') {
-      const aux = sites.filter((site) => site.name.toLowerCase().match(data));
+      const aux = originalSites.filter((site) => site.name.toLowerCase().match(data));
       setLocalSites(aux);
     } else {
-      setLocalSites(sites);
+      setLocalSites(originalSites);
     }
   };
 
