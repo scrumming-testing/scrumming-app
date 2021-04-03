@@ -16,13 +16,13 @@ import CreateForm from './CreateForm';
 import UpdateForm from './UpdateForm';
 import DeleteForm from './DeleteForm';
 
-const BusinessListToolbar = (props) => {
+const SiteListToolbar = (props) => {
   const navigate = useNavigate();
 
   const [dialog, setDialog] = useState(null);
   const [disableDelete, setDisableDelete] = useState(true);
   const [disableUpdate, setDisableUpdate] = useState(true);
-  const [disableSites, setDisableSites] = useState(true);
+  const [disableProjects, setDisableProjects] = useState(true);
   const [elementsIDs, setElementsIDs] = useState([]);
 
   const { handleSearchData, handleSelectedData } = props;
@@ -34,10 +34,10 @@ const BusinessListToolbar = (props) => {
   useEffect(() => {
     if (handleSelectedData.length === 1) {
       setDisableUpdate(false);
-      setDisableSites(false);
+      setDisableProjects(false);
     } else {
       setDisableUpdate(true);
-      setDisableSites(true);
+      setDisableProjects(true);
     }
 
     if (handleSelectedData.length > 0) {
@@ -68,11 +68,11 @@ const BusinessListToolbar = (props) => {
     setDialog(<DeleteForm formClosed={unmountDialog} dataIds={elementsIDs} />);
   };
 
-  const openSitesDashboard = () => {
-    console.log('Redirecting to B unit dashboard');
+  const openProjectsDashboard = () => {
+    console.log('Redirecting to projects dashboard');
     console.log(elementsIDs[0]);
-    const businessID = elementsIDs[0];
-    navigate(`${businessID}/sites`);
+    const siteID = elementsIDs[0];
+    navigate(`${siteID}/projects`);
   };
 
   return (
@@ -92,10 +92,10 @@ const BusinessListToolbar = (props) => {
             mx: 1
           }}
           variant="contained"
-          disabled={disableSites}
-          onClick={openSitesDashboard}
+          disabled={disableProjects}
+          onClick={openProjectsDashboard}
         >
-          Get Sites
+          Get Projects
         </Button>
         <Button
           sx={{
@@ -128,7 +128,7 @@ const BusinessListToolbar = (props) => {
           variant="contained"
           onClick={openCreateDialog}
         >
-          Add organization
+          Add site
         </Button>
       </Box>
       <Box sx={{ mt: 3 }}>
@@ -149,7 +149,7 @@ const BusinessListToolbar = (props) => {
                     </InputAdornment>
                   )
                 }}
-                placeholder="Search Business Unit"
+                placeholder="Search Site"
                 variant="outlined"
                 onChange={(e) => handleSearchData(e.target.value)}
               />
@@ -161,9 +161,9 @@ const BusinessListToolbar = (props) => {
   );
 };
 
-BusinessListToolbar.propTypes = {
+SiteListToolbar.propTypes = {
   handleSearchData: PropTypes.func.isRequired,
   handleSelectedData: PropTypes.array.isRequired,
 };
 
-export default BusinessListToolbar;
+export default SiteListToolbar;

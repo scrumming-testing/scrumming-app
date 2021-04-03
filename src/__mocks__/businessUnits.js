@@ -1,24 +1,22 @@
-import { v4 as uuid } from 'uuid';
-
 export default [
   {
-    id: uuid(),
-    name: 'Intel MX',
+    id: '11111',
+    name: 'Hardware Intel',
     organization: '123456'
   },
   {
-    id: uuid(),
-    name: 'Intel US',
+    id: '22222',
+    name: 'Software Intel',
     organization: '123456'
   },
   {
-    id: uuid(),
-    name: 'Intel UK',
+    id: '33333',
+    name: 'Linux Intel',
     organization: '123456'
   },
   {
-    id: uuid(),
-    name: 'Facebook LA',
+    id: '44444',
+    name: 'Facebook Messenger',
     organization: '123896'
   },
 ];

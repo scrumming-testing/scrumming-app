@@ -11,8 +11,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
-
-import businessUnits from '../../__mocks__/businessUnits';
+import { useParams } from 'react-router';
 
 function PaperComponent(props) {
   return (
@@ -25,28 +24,15 @@ function PaperComponent(props) {
   );
 }
 
-export default function UpdateForm({ formClosed, elementId }) {
+export default function CreateForm({ formClosed }) {
+  const { businessUnitID } = useParams();
   const [values, setValues] = React.useState({
     name: '',
   });
   const [open, setOpen] = useState(true);
 
   useEffect(() => {
-    console.log('Dialog Update Opened');
-    console.log('Fetching B Unit Data');
-    console.log(elementId);
-    const bUnit = businessUnits.find((bu) => bu.id === elementId);
-
-    if (bUnit !== undefined) {
-      console.log('Found bUnit');
-      console.log(bUnit);
-      setValues((prevState) => {
-        const bUnitData = { ...prevState };
-        bUnitData.name = bUnit.name;
-        bUnitData.id = bUnit.id;
-        return { ...bUnitData };
-      });
-    }
+    console.log('Dialog Create Opened');
   }, []);
 
   const handleClose = () => {
@@ -54,9 +40,10 @@ export default function UpdateForm({ formClosed, elementId }) {
     formClosed(true);
   };
 
-  const update = () => {
-    console.log('[+] UPDATING Business Unit');
+  const create = () => {
+    console.log('[+] CREATING Site');
     console.log(values);
+    console.log(businessUnitID);
   };
 
   const handleChange = (prop) => (event) => {
@@ -69,11 +56,10 @@ export default function UpdateForm({ formClosed, elementId }) {
       onClose={handleClose}
       PaperComponent={PaperComponent}
       aria-labelledby="draggable-dialog-title"
-      className="CustomDialog"
     >
       <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
         <DialogContentText>
-          You are updating an organization
+          You are creating a site
         </DialogContentText>
       </DialogTitle>
       <DialogContent>
@@ -92,15 +78,14 @@ export default function UpdateForm({ formClosed, elementId }) {
         <Button autoFocus onClick={handleClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={update} color="primary">
-          Update
+        <Button onClick={create} color="primary">
+          Create
         </Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-UpdateForm.propTypes = {
+CreateForm.propTypes = {
   formClosed: PropTypes.func.isRequired,
-  elementId: PropTypes.string.isRequired,
 };

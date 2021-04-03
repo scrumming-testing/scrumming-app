@@ -12,7 +12,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
 
-import businessUnits from '../../__mocks__/businessUnits';
+import sites from '../../__mocks__/sites';
 
 function PaperComponent(props) {
   return (
@@ -33,18 +33,18 @@ export default function UpdateForm({ formClosed, elementId }) {
 
   useEffect(() => {
     console.log('Dialog Update Opened');
-    console.log('Fetching B Unit Data');
+    console.log('Fetching Site Data');
     console.log(elementId);
-    const bUnit = businessUnits.find((bu) => bu.id === elementId);
+    const site = sites.find((s) => s.id === elementId);
 
-    if (bUnit !== undefined) {
-      console.log('Found bUnit');
-      console.log(bUnit);
+    if (site !== undefined) {
+      console.log('Found site');
+      console.log(site);
       setValues((prevState) => {
-        const bUnitData = { ...prevState };
-        bUnitData.name = bUnit.name;
-        bUnitData.id = bUnit.id;
-        return { ...bUnitData };
+        const siteData = { ...prevState };
+        siteData.name = site.name;
+        siteData.id = site.id;
+        return { ...siteData };
       });
     }
   }, []);
@@ -55,7 +55,7 @@ export default function UpdateForm({ formClosed, elementId }) {
   };
 
   const update = () => {
-    console.log('[+] UPDATING Business Unit');
+    console.log('[+] UPDATING Site');
     console.log(values);
   };
 
@@ -73,7 +73,7 @@ export default function UpdateForm({ formClosed, elementId }) {
     >
       <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
         <DialogContentText>
-          You are updating an organization
+          You are updating a site
         </DialogContentText>
       </DialogTitle>
       <DialogContent>

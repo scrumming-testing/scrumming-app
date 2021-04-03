@@ -11,6 +11,7 @@ import Register from 'src/pages/Register';
 import Settings from 'src/pages/Settings';
 import Organizations from 'src/pages/Organizations';
 import BusinessUnits from './pages/BusinessUnits';
+import Sites from './pages/Sites';
 
 /* eslint-disable react/prop-types */
 const routes = [
@@ -25,6 +26,7 @@ const routes = [
       { path: 'settings', element: <Settings /> },
       { path: 'organizations', element: <Organizations /> },
       { path: 'organizations/:organizationID/business-unit/', element: <BusinessUnits /> },
+      { path: 'organizations/:organizationID/business-unit/:businessUnitID/sites', element: <Sites /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
