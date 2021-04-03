@@ -123,7 +123,7 @@ const BusinessListToolbar = (props) => {
                     </InputAdornment>
                   )
                 }}
-                placeholder="Search Organization"
+                placeholder="Search Business Unit"
                 variant="outlined"
                 onChange={(e) => handleSearchData(e.target.value)}
               />
