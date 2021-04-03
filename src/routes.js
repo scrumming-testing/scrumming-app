@@ -24,7 +24,7 @@ const routes = [
       { path: 'products', element: <ProductList /> },
       { path: 'settings', element: <Settings /> },
       { path: 'organizations', element: <Organizations /> },
-      { path: 'business-unit/:organizationID', element: <BusinessUnits /> },
+      { path: 'organizations/:organizationID/business-unit/', element: <BusinessUnits /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
