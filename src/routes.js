@@ -10,7 +10,9 @@ import ProductList from 'src/pages/ProductList';
 import Register from 'src/pages/Register';
 import Settings from 'src/pages/Settings';
 import Organizations from 'src/pages/Organizations';
+import BusinessUnits from './pages/BusinessUnits';
 
+/* eslint-disable react/prop-types */
 const routes = [
   {
     path: 'app',
@@ -22,6 +24,7 @@ const routes = [
       { path: 'products', element: <ProductList /> },
       { path: 'settings', element: <Settings /> },
       { path: 'organizations', element: <Organizations /> },
+      { path: 'business-unit/:organizationID', element: <BusinessUnits /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
