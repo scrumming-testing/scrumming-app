@@ -85,9 +85,6 @@ const OrganizationListResults = ({ data, handleSelectedData, ...rest }) => {
                   Name
                 </TableCell>
                 <TableCell>
-                  Owner
-                </TableCell>
-                <TableCell>
                   Registration date
                 </TableCell>
               </TableRow>
@@ -126,9 +123,6 @@ const OrganizationListResults = ({ data, handleSelectedData, ...rest }) => {
                         {`${element.name}`}
                       </Typography>
                     </Box>
-                  </TableCell>
-                  <TableCell>
-                    {element.owner}
                   </TableCell>
                   <TableCell>
                     {moment(element.createdAt).format('DD/MM/YYYY')}

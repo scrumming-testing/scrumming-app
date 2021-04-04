@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Avatar,
   DialogContentText,
-  IconButton,
-  Input,
-  Stack,
   TextField,
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -15,7 +11,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
-import { PhotoCamera } from '@material-ui/icons';
+import axios from 'axios';
 
 function PaperComponent(props) {
   return (
@@ -34,7 +30,6 @@ export default function CreateForm({ formClosed }) {
     owner: '',
   });
   const [open, setOpen] = useState(true);
-  const [profileImage, setProfileImage] = useState('');
 
   useEffect(() => {
     console.log('Dialog Create Opened');
@@ -48,31 +43,29 @@ export default function CreateForm({ formClosed }) {
   const createUser = () => {
     console.log('[+] CREATING Organization');
     console.log(values);
-    console.log(profileImage);
+    const config = {
+      method: 'post',
+      url: `${process.env.REACT_APP_API_URL}/organization`,
+      headers: {
+        Authorization: '{{TOKEN}}',
+        'Content-Type': 'application/json'
+      },
+      data: values
+    };
+    axios(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        formClosed('Creation successful');
+      })
+      .catch((error) => {
+        console.log(error);
+        formClosed('Error while trying post organization');
+      });
+    setOpen(false);
   };
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleProfileImageChange = (e) => {
-    // https://medium.com/@mahesh_joshi/reactjs-nodejs-upload-image-how-to-upload-image-using-reactjs-and-nodejs-multer-918dc66d304c
-    console.log(e.target.files[0]);
-    // setProfileImage('/static/images/avatars/avatar_6.png');
-
-    const reader = new FileReader();
-    const file = e.target.files[0];
-
-    reader.onloadend = () => {
-      console.log(reader);
-      setProfileImage(reader.result);
-    };
-
-    try {
-      reader.readAsDataURL(file);
-    } catch {
-      console.log('[-] ERROR loading image');
-    }
   };
 
   return (
@@ -88,22 +81,6 @@ export default function CreateForm({ formClosed }) {
         </DialogContentText>
       </DialogTitle>
       <DialogContent>
-        <Stack direction="row" alignItems="center" spacing={1}>
-          <Avatar
-            src={profileImage}
-            sx={{
-              height: 100,
-              width: 100
-            }}
-          />
-          <label htmlFor="icon-button-file">
-            <>{ /* eslint-disable-next-line jsx-a11y/label-has-associated-control */ }</>
-            <Input accept="image/*" style={{ display: 'none' }} name="icon-button-file" id="icon-button-file" type="file" onChange={handleProfileImageChange} />
-            <IconButton color="primary" aria-label="upload picture" component="span">
-              <PhotoCamera />
-            </IconButton>
-          </label>
-        </Stack>
         <TextField
           autoFocus
           margin="dense"

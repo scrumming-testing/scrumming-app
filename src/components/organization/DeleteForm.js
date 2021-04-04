@@ -17,8 +17,7 @@ import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
 
 import getInitials from 'src/utils/getInitials';
-
-import organizations from '../../__mocks__/organizations';
+import axios from 'axios';
 
 function PaperComponent(props) {
   return (
@@ -46,15 +45,49 @@ export default function DeleteForm({ formClosed, dataIds }) {
 
   useEffect(() => {
     console.log('Dialog Delete Opened');
-    console.log('Organizations IDs');
     console.log(dataIds);
-    const deletion = organizations.filter((e) => dataIds.find((id) => id === e.id));
-    setElementsToDelete(deletion);
+    const fetchData = async () => {
+      let organizations = [];
+      const config = {
+        method: 'get',
+        url: `${process.env.REACT_APP_API_URL}/organization`,
+        headers: {
+          Authorization: '{{TOKEN}}'
+        }
+      };
+      await axios(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+          organizations = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      const deletion = organizations.filter((e) => dataIds.find((id) => id === e.id));
+      setElementsToDelete(deletion);
+    };
+    fetchData();
   }, []);
 
   const deleteElements = () => {
     console.log('[+] DELETE ORGANIZATIONS');
     console.log(elementsToDelete);
+    dataIds.forEach(async (id) => {
+      const config = {
+        method: 'delete',
+        url: `${process.env.REACT_APP_API_URL}/organization/${id}`,
+        headers: {
+          Authorization: '{{TOKEN}}'
+        }
+      };
+      await axios(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
   };
 
   const handleClose = () => {
@@ -78,14 +111,14 @@ export default function DeleteForm({ formClosed, dataIds }) {
       <DialogContent>
         <List className={classes.root}>
           {elementsToDelete.map((e) => (
-            <ListItem>
+            <ListItem key={e.id}>
               <Avatar
                 src={e.avatarUrl}
                 sx={{ mr: 2 }}
               >
                 {getInitials(e.name)}
               </Avatar>
-              <ListItemText primary={`Owner : ${e.owner}`} secondary={`useful data ${e.owner}`} />
+              <ListItemText primary={`ORGANIZATION : ${e.name}`} />
             </ListItem>
           ))}
         </List>
