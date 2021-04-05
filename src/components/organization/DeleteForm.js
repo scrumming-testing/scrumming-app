@@ -83,11 +83,14 @@ export default function DeleteForm({ formClosed, dataIds }) {
       await axios(config)
         .then((response) => {
           console.log(JSON.stringify(response.data));
+          formClosed(response.status);
         })
         .catch((error) => {
           console.log(error);
+          formClosed(error);
         });
     });
+    setOpen(false);
   };
 
   const handleClose = () => {

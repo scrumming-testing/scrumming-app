@@ -25,7 +25,7 @@ const BusinessListToolbar = (props) => {
   const [disableSites, setDisableSites] = useState(true);
   const [elementsIDs, setElementsIDs] = useState([]);
 
-  const { handleSearchData, handleSelectedData } = props;
+  const { handleSearchData, handleSelectedData, handleApiAction } = props;
 
   useEffect(() => {
     setDialog(null);
@@ -48,8 +48,9 @@ const BusinessListToolbar = (props) => {
     setElementsIDs(handleSelectedData);
   }, [handleSelectedData]);
 
-  const unmountDialog = () => {
+  const unmountDialog = (message) => {
     setDialog(null);
+    handleApiAction(message);
   };
 
   const openCreateDialog = () => {
@@ -164,6 +165,7 @@ const BusinessListToolbar = (props) => {
 BusinessListToolbar.propTypes = {
   handleSearchData: PropTypes.func.isRequired,
   handleSelectedData: PropTypes.array.isRequired,
+  handleApiAction: PropTypes.func.isRequired,
 };
 
 export default BusinessListToolbar;

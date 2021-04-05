@@ -1,11 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { Box, Container } from '@material-ui/core';
+import {
+  Box,
+  Container,
+  Alert,
+  AlertTitle,
+} from '@material-ui/core';
 import { useParams } from 'react-router';
 import BusinessListResults from 'src/components/businessUnits/BusinessListResults';
 import BusinessListToolbar from 'src/components/businessUnits/BusinessListToolbar';
 
-import businessUnits from '../__mocks__/businessUnits';
+// import businessUnits from '../__mocks__/businessUnits';
+
+import axios from 'axios';
 
 const BusinessUnits = () => {
   const { organizationID } = useParams();
@@ -13,11 +20,43 @@ const BusinessUnits = () => {
   const [localBusinessUnits, setLocalBusinessUnits] = useState([]);
   const [originalBusinessUnits, setOriginalLocalBusinessUnits] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
+  const [dialog, setDialog] = useState(null);
 
   useEffect(() => {
-    const aux = businessUnits.filter((unit) => unit.organization === organizationID);
-    setLocalBusinessUnits(aux);
-    setOriginalLocalBusinessUnits(aux);
+    const fetchData = async () => {
+      let businessUnits = [];
+      const config = {
+        method: 'get',
+        url: `${process.env.REACT_APP_API_URL}/business-unit`,
+        headers: {
+          Authorization: '{{TOKEN}}'
+        }
+      };
+      await axios(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+          businessUnits = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          setDialog(
+            <Alert severity="error">
+              <AlertTitle>
+                info
+              </AlertTitle>
+              message:
+              <br />
+              <strong>
+                Error fetching data, please try later or contact support.
+              </strong>
+            </Alert>
+          );
+        });
+      const aux = businessUnits.filter((unit) => unit.organizationId === organizationID);
+      setLocalBusinessUnits(aux);
+      setOriginalLocalBusinessUnits(aux);
+    };
+    fetchData();
   }, []);
 
   const handleSearchData = (data) => {
@@ -33,6 +72,11 @@ const BusinessUnits = () => {
     setSelectedData(newSelectedData);
   };
 
+  const handleApiAction = (response) => {
+    console.log(response);
+    window.location.reload();
+  };
+
   return (
     <>
       <Helmet>
@@ -46,7 +90,8 @@ const BusinessUnits = () => {
         }}
       >
         <Container maxWidth={false}>
-          <BusinessListToolbar handleSearchData={handleSearchData} handleSelectedData={selectedData} />
+          <BusinessListToolbar handleSearchData={handleSearchData} handleSelectedData={selectedData} handleApiAction={handleApiAction} />
+          {dialog}
           <Box sx={{ pt: 3 }}>
             <BusinessListResults data={localBusinessUnits} handleSelectedData={handleSelectedData} />
           </Box>

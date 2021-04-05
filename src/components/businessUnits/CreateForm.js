@@ -12,6 +12,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
 import { useParams } from 'react-router';
+import axios from 'axios';
 
 function PaperComponent(props) {
   return (
@@ -44,6 +45,29 @@ export default function CreateForm({ formClosed }) {
     console.log('[+] CREATING Business Unit');
     console.log(values);
     console.log(organizationID);
+    const data = JSON.stringify({
+      name: values.name,
+      organization: organizationID
+    });
+    const config = {
+      method: 'post',
+      url: `${process.env.REACT_APP_API_URL}/business-unit`,
+      headers: {
+        Authorization: '{{TOKEN}}',
+        'Content-Type': 'application/json'
+      },
+      data
+    };
+    axios(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        formClosed(response.status);
+      })
+      .catch((error) => {
+        console.log(error);
+        formClosed(error);
+      });
+    setOpen(false);
   };
 
   const handleChange = (prop) => (event) => {

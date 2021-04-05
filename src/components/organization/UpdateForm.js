@@ -19,6 +19,7 @@ import Draggable from 'react-draggable';
 
 import getInitials from 'src/utils/getInitials';
 import axios from 'axios';
+import { v4 as uuid } from 'uuid';
 // import users from '../../__mocks__/users';
 // import organizations from 'src/__mocks__/organizations';
 
@@ -98,7 +99,7 @@ export default function UpdateForm({ formClosed, elementId }) {
     axios(config)
       .then((response) => {
         console.log(JSON.stringify(response.data));
-        formClosed('Update successful');
+        formClosed({ status: response.status, id: uuid() });
       })
       .catch((error) => {
         console.log(error);

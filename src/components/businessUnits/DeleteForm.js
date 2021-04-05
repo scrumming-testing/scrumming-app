@@ -17,8 +17,7 @@ import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
 
 import getInitials from 'src/utils/getInitials';
-
-import businessUnits from '../../__mocks__/businessUnits';
+import axios from 'axios';
 
 function PaperComponent(props) {
   return (
@@ -48,13 +47,51 @@ export default function DeleteForm({ formClosed, dataIds }) {
     console.log('Dialog Delete Opened');
     console.log('BUnits IDs');
     console.log(dataIds);
-    const deletion = businessUnits.filter((e) => dataIds.find((id) => id === e.id));
-    setElementsToDelete(deletion);
+    const fetchData = async () => {
+      let businessUnits = [];
+      const config = {
+        method: 'get',
+        url: `${process.env.REACT_APP_API_URL}/business-unit`,
+        headers: {
+          Authorization: '{{TOKEN}}'
+        }
+      };
+      await axios(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+          businessUnits = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      const deletion = businessUnits.filter((e) => dataIds.find((id) => id === e.id));
+      setElementsToDelete(deletion);
+    };
+    fetchData();
   }, []);
 
   const deleteElements = () => {
     console.log('[+] DELETE ORGANIZATIONS');
     console.log(elementsToDelete);
+    dataIds.forEach(async (id) => {
+      const config = {
+        method: 'delete',
+        url: `${process.env.REACT_APP_API_URL}/business-unit/${id}`,
+        headers: {
+          Authorization: '{{TOKEN}}'
+        }
+      };
+      await axios(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+          formClosed(response.status);
+        })
+        .catch((error) => {
+          console.log(error);
+          formClosed(error);
+        });
+    });
+    setOpen(false);
   };
 
   const handleClose = () => {
