@@ -20,6 +20,7 @@ import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
 import { PhotoCamera } from '@material-ui/icons';
 import axios from 'axios';
+import FormData from 'form-data';
 import { v4 as uuid } from 'uuid';
 
 function PaperComponent(props) {
@@ -176,7 +177,21 @@ export default function UpdateForm({ formClosed, userId }) {
 
     reader.onloadend = () => {
       console.log(reader);
-      setProfileImage(reader.result);
+      const formdata = new FormData();
+      formdata.append('image', file);
+      const requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow'
+      };
+      fetch('https://media-uploader-service.app.andresg.me/images/upload', requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+          console.log(result.downloadLink);
+          setProfileImage(result.downloadLink);
+        })
+        .catch((error) => console.log('error', error));
     };
 
     try {
