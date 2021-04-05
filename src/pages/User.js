@@ -75,6 +75,11 @@ const User = () => {
     setSelectedUsers(newSelectedUsers);
   };
 
+  const handleApiAction = (response) => {
+    console.log(response);
+    window.location.reload();
+  };
+
   return (
     <>
       <Helmet>
@@ -88,7 +93,7 @@ const User = () => {
         }}
       >
         <Container maxWidth={false}>
-          <AccountListToolbar handleSearchData={handleSearchData} handleSelectedUsers={selectedUsers} />
+          <AccountListToolbar handleSearchData={handleSearchData} handleSelectedUsers={selectedUsers} handleApiAction={handleApiAction} />
           {dialog}
           <Box sx={{ pt: 3 }}>
             <AccountListResults users={localUsers} handleSelectedUsers={handleSelectedUsers} />

@@ -19,9 +19,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
 import { PhotoCamera } from '@material-ui/icons';
-
-import roles from '../../__mocks__/roles';
-import users from '../../__mocks__/users';
+import axios from 'axios';
+import { v4 as uuid } from 'uuid';
 
 function PaperComponent(props) {
   return (
@@ -36,43 +35,94 @@ function PaperComponent(props) {
 
 export default function UpdateForm({ formClosed, userId }) {
   const [rolesData, setRolesData] = useState([]);
+  const [sitesData, setSitesData] = useState([]);
   const [values, setValues] = React.useState({
     firstName: '',
     lastName: '',
-    email: '',
     role: '',
-    id: '',
+    site: '',
   });
   const [open, setOpen] = useState(true);
   const [profileImage, setProfileImage] = useState('');
 
   useEffect(() => {
-    console.log('Dialog Update Opened');
-    console.log('Fetching Roles');
-    setRolesData(roles);
-
-    console.log('Fetching User Data');
-    const user = users.find((usr) => usr.id === userId);
-    if (user !== undefined) {
-      console.log('Found user');
-      console.log(user);
-      setValues((prevState) => {
-        const userData = { ...prevState };
-        userData.firstName = user.firstName;
-        userData.lastName = user.lastName;
-        userData.email = user.email;
-        userData.role = '';
-        userData.id = user.id;
-        return { ...userData };
-      });
-      setProfileImage(user.avatarUrl);
-      /* const reader = new FileReader();
-      reader.onloadend = () => {
-        console.log(reader);
-        setProfileImage(reader.result);
+    console.log('Dialog Create Opened');
+    console.log('Fetching Sites');
+    const fetchSitesData = async () => {
+      let sites = [];
+      const config = {
+        method: 'get',
+        url: `${process.env.REACT_APP_API_URL}/site`,
+        headers: {
+          Authorization: '{{TOKEN}}'
+        }
       };
-      reader.readAsDataURL(user.avatarUrl); */
-    }
+      await axios(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+          sites = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          formClosed(error);
+          setOpen(false);
+        });
+      setSitesData(sites);
+    };
+    fetchSitesData();
+    console.log('Fetching Roles');
+    const fetchRolesData = async () => {
+      let roles = [];
+      const config = {
+        method: 'get',
+        url: `${process.env.REACT_APP_API_URL}/role`,
+        headers: {
+          Authorization: '{{TOKEN}}'
+        }
+      };
+      await axios(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+          roles = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          formClosed(error);
+          setOpen(false);
+        });
+      setRolesData(roles);
+    };
+    fetchRolesData();
+    console.log('Fetching User');
+    const fetchUserData = async () => {
+      const config = {
+        method: 'get',
+        url: `${process.env.REACT_APP_API_URL}/user/search/id/${userId}`,
+        headers: {
+          Authorization: '{{TOKEN}}'
+        }
+      };
+      await axios(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+          const user = response.data;
+          setValues((prevState) => {
+            const userData = { ...prevState };
+            userData.firstName = user.firstName;
+            userData.lastName = user.lastName;
+            userData.role = '';
+            userData.id = user.id;
+            return { ...userData };
+          });
+          setProfileImage(user.avatar);
+        })
+        .catch((error) => {
+          console.log(error);
+          // formClosed(error);
+          // setOpen(false);
+        });
+    };
+    fetchUserData();
   }, []);
 
   const handleClose = () => {
@@ -84,6 +134,32 @@ export default function UpdateForm({ formClosed, userId }) {
     console.log('[+] UPDATING USER');
     console.log(values);
     console.log(profileImage);
+    const data = JSON.stringify({
+      firstName: values.firstName,
+      lastName: values.lastName,
+      site: values.site,
+      role: values.role,
+      avatar: profileImage
+    });
+    const config = {
+      method: 'patch',
+      url: `${process.env.REACT_APP_API_URL}/user/${userId}`,
+      headers: {
+        Authorization: '{{TOKEN}}',
+        'Content-Type': 'application/json',
+      },
+      data
+    };
+    axios(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        formClosed({ status: response.status, id: uuid() });
+      })
+      .catch((error) => {
+        console.log(error);
+        formClosed('Error while trying organization update');
+      });
+    setOpen(false);
   };
 
   const handleChange = (prop) => (event) => {
@@ -159,15 +235,6 @@ export default function UpdateForm({ formClosed, userId }) {
           fullWidth
           onChange={handleChange('lastName')}
         />
-        <TextField
-          margin="dense"
-          value={values.email}
-          id="email"
-          label="email"
-          type="text"
-          fullWidth
-          onChange={handleChange('email')}
-        />
         <InputLabel htmlFor="roles">Role</InputLabel>
         <Select
           value={values.role}
@@ -179,6 +246,20 @@ export default function UpdateForm({ formClosed, userId }) {
           }}
         >
           {rolesData.map((e) => (
+            <MenuItem key={`role-${e.id}`} value={e.id}>{`${e.name}`}</MenuItem>
+          ))}
+        </Select>
+        <InputLabel htmlFor="sites">Site</InputLabel>
+        <Select
+          value={values.site}
+          fullWidth
+          onChange={handleChange('site')}
+          inputProps={{
+            name: 'sites',
+            id: 'sites',
+          }}
+        >
+          {sitesData.map((e) => (
             <MenuItem key={`role-${e.id}`} value={e.id}>{`${e.name}`}</MenuItem>
           ))}
         </Select>

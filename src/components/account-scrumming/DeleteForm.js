@@ -18,7 +18,7 @@ import Draggable from 'react-draggable';
 
 import getInitials from 'src/utils/getInitials';
 
-import users from '../../__mocks__/users';
+import axios from 'axios';
 
 function PaperComponent(props) {
   return (
@@ -48,13 +48,53 @@ export default function DeleteForm({ formClosed, userIds }) {
     console.log('Dialog Delete Opened');
     console.log('Users IDs');
     console.log(userIds);
-    const deletion = users.filter((usr) => userIds.find((id) => id === usr.id));
-    setUsersToDelete(deletion);
+    const fetchData = async () => {
+      let users = [];
+      const config = {
+        method: 'get',
+        url: `${process.env.REACT_APP_API_URL}/user`,
+        headers: {
+          Authorization: '{{TOKEN}}'
+        }
+      };
+      await axios(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+          users = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          formClosed('Error while trying to fetch user');
+          setOpen(false);
+        });
+      const deletion = users.filter((usr) => userIds.find((id) => id === usr.id));
+      setUsersToDelete(deletion);
+    };
+    fetchData();
   }, []);
 
   const deleteUsers = () => {
     console.log('[+] DELETE USER');
     console.log(userIds);
+    userIds.forEach(async (id) => {
+      const config = {
+        method: 'delete',
+        url: `${process.env.REACT_APP_API_URL}/user/${id}`,
+        headers: {
+          Authorization: '{{TOKEN}}'
+        }
+      };
+      await axios(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+          formClosed(response.status);
+        })
+        .catch((error) => {
+          console.log(error);
+          formClosed(error);
+        });
+    });
+    setOpen(false);
   };
 
   const handleClose = () => {
@@ -80,7 +120,7 @@ export default function DeleteForm({ formClosed, userIds }) {
           {usersToDelete.map((user) => (
             <ListItem>
               <Avatar
-                src={user.avatarUrl}
+                src={user.avatar}
                 sx={{ mr: 2 }}
               >
                 {getInitials(user.firstName)}

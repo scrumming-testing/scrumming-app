@@ -19,8 +19,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
 import { PhotoCamera } from '@material-ui/icons';
-
-import roles from '../../__mocks__/roles';
+import axios from 'axios';
 
 function PaperComponent(props) {
   return (
@@ -35,30 +34,105 @@ function PaperComponent(props) {
 
 export default function CreateForm({ formClosed }) {
   const [rolesData, setRolesData] = useState([]);
+  const [sitesData, setSitesData] = useState([]);
   const [values, setValues] = React.useState({
     firstName: '',
     lastName: '',
     email: '',
-    role: ''
+    role: '',
+    site: '',
   });
   const [open, setOpen] = useState(true);
   const [profileImage, setProfileImage] = useState('');
 
   useEffect(() => {
     console.log('Dialog Create Opened');
+    console.log('Fetching Sites');
+    const fetchSitesData = async () => {
+      let sites = [];
+      const config = {
+        method: 'get',
+        url: `${process.env.REACT_APP_API_URL}/site`,
+        headers: {
+          Authorization: '{{TOKEN}}'
+        }
+      };
+      await axios(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+          sites = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          formClosed(error);
+          setOpen(false);
+        });
+      setSitesData(sites);
+    };
+    fetchSitesData();
     console.log('Fetching Roles');
-    setRolesData(roles);
+    const fetchRolesData = async () => {
+      let roles = [];
+      const config = {
+        method: 'get',
+        url: `${process.env.REACT_APP_API_URL}/role`,
+        headers: {
+          Authorization: '{{TOKEN}}'
+        }
+      };
+      await axios(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+          roles = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          formClosed(error);
+          setOpen(false);
+        });
+      setRolesData(roles);
+    };
+    fetchRolesData();
   }, []);
 
   const handleClose = () => {
     setOpen(false);
     formClosed(true);
   };
-
   const createUser = () => {
     console.log('[+] CREATING USER');
     console.log(values);
     console.log(profileImage);
+    const data = JSON.stringify({
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      site: values.site,
+      role: values.role,
+      avatar: profileImage
+    });
+    console.log(data);
+
+    const config = {
+      method: 'post',
+      url: `${process.env.REACT_APP_API_URL}/user`,
+      headers: {
+        Authorization: '{{TOKEN}}',
+        'Content-Type': 'application/json'
+      },
+      data
+    };
+
+    axios(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        formClosed(response.status);
+      })
+      .catch((error) => {
+        console.log(error);
+        formClosed(error);
+      });
+    setOpen(false);
   };
 
   const handleChange = (prop) => (event) => {
@@ -153,6 +227,20 @@ export default function CreateForm({ formClosed }) {
           }}
         >
           {rolesData.map((e) => (
+            <MenuItem key={`role-${e.id}`} value={e.id}>{`${e.name}`}</MenuItem>
+          ))}
+        </Select>
+        <InputLabel htmlFor="sites">Site</InputLabel>
+        <Select
+          value={values.site}
+          fullWidth
+          onChange={handleChange('site')}
+          inputProps={{
+            name: 'sites',
+            id: 'sites',
+          }}
+        >
+          {sitesData.map((e) => (
             <MenuItem key={`role-${e.id}`} value={e.id}>{`${e.name}`}</MenuItem>
           ))}
         </Select>

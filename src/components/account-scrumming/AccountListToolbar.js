@@ -21,7 +21,7 @@ const AccountListToolbar = (props) => {
   const [disableUpdate, setDisableUpdate] = useState(true);
   const [usersIDs, setUsersIDs] = useState([]);
 
-  const { handleSearchData, handleSelectedUsers } = props;
+  const { handleSearchData, handleSelectedUsers, handleApiAction } = props;
 
   useEffect(() => {
     setDialog(null);
@@ -42,8 +42,9 @@ const AccountListToolbar = (props) => {
     setUsersIDs(handleSelectedUsers);
   }, [handleSelectedUsers]);
 
-  const unmountDialog = () => {
+  const unmountDialog = (message) => {
     setDialog(null);
+    handleApiAction(message);
   };
 
   const openCreateDialog = () => {
@@ -136,6 +137,7 @@ const AccountListToolbar = (props) => {
 AccountListToolbar.propTypes = {
   handleSearchData: PropTypes.func.isRequired,
   handleSelectedUsers: PropTypes.array.isRequired,
+  handleApiAction: PropTypes.func.isRequired,
 };
 
 export default AccountListToolbar;

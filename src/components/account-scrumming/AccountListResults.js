@@ -88,6 +88,12 @@ const AccountListResults = ({ users, handleSelectedUsers, ...rest }) => {
                   Email
                 </TableCell>
                 <TableCell>
+                  Role
+                </TableCell>
+                <TableCell>
+                  Site
+                </TableCell>
+                <TableCell>
                   Registration date
                 </TableCell>
               </TableRow>
@@ -114,7 +120,7 @@ const AccountListResults = ({ users, handleSelectedUsers, ...rest }) => {
                       }}
                     >
                       <Avatar
-                        src={user.avatarUrl}
+                        src={user.avatar}
                         sx={{ mr: 2 }}
                       >
                         {getInitials(user.firstName)}
@@ -129,6 +135,12 @@ const AccountListResults = ({ users, handleSelectedUsers, ...rest }) => {
                   </TableCell>
                   <TableCell>
                     {user.email}
+                  </TableCell>
+                  <TableCell>
+                    {user.role.name}
+                  </TableCell>
+                  <TableCell>
+                    {user.site.name}
                   </TableCell>
                   <TableCell>
                     {moment(user.createdAt).format('DD/MM/YYYY')}
