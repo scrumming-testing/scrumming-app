@@ -21,7 +21,7 @@ const RoleListToolbar = (props) => {
   const [disableUpdate, setDisableUpdate] = useState(true);
   const [elementsIDs, setElementsIDs] = useState([]);
 
-  const { handleSearchData, handleSelectedData } = props;
+  const { handleSearchData, handleSelectedData, handleApiAction } = props;
 
   useEffect(() => {
     setDialog(null);
@@ -42,8 +42,9 @@ const RoleListToolbar = (props) => {
     setElementsIDs(handleSelectedData);
   }, [handleSelectedData]);
 
-  const unmountDialog = () => {
+  const unmountDialog = (message) => {
     setDialog(null);
+    handleApiAction(message);
   };
 
   const openCreateDialog = () => {
@@ -123,7 +124,7 @@ const RoleListToolbar = (props) => {
                     </InputAdornment>
                   )
                 }}
-                placeholder="Search Site"
+                placeholder="Search Role"
                 variant="outlined"
                 onChange={(e) => handleSearchData(e.target.value)}
               />
@@ -138,6 +139,7 @@ const RoleListToolbar = (props) => {
 RoleListToolbar.propTypes = {
   handleSearchData: PropTypes.func.isRequired,
   handleSelectedData: PropTypes.array.isRequired,
+  handleApiAction: PropTypes.func.isRequired,
 };
 
 export default RoleListToolbar;

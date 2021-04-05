@@ -11,6 +11,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
+import axios from 'axios';
 
 function PaperComponent(props) {
   return (
@@ -41,6 +42,29 @@ export default function CreateForm({ formClosed }) {
   const create = () => {
     console.log('[+] CREATING Role');
     console.log(values);
+
+    const data = JSON.stringify({
+      name: values.name,
+    });
+    const config = {
+      method: 'post',
+      url: `${process.env.REACT_APP_API_URL}/role`,
+      headers: {
+        Authorization: '{{TOKEN}}',
+        'Content-Type': 'application/json'
+      },
+      data
+    };
+    axios(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        formClosed(response.status);
+      })
+      .catch((error) => {
+        console.log(error);
+        formClosed(error);
+      });
+    setOpen(false);
   };
 
   const handleChange = (prop) => (event) => {

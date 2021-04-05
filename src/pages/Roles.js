@@ -1,21 +1,59 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { Box, Container } from '@material-ui/core';
+import {
+  Box,
+  Container,
+  Alert,
+  AlertTitle,
+} from '@material-ui/core';
 import RoleListResults from 'src/components/roles/RoleListResults';
 import RoleListToolbar from 'src/components/roles/RoleListToolbar';
 
-import roles from '../__mocks__/roles';
+import axios from 'axios';
 
 const Roles = () => {
   const [originalRoles, setOriginalLocalRoles] = useState([]);
 
   const [localRoles, setLocalRoles] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
+  const [dialog, setDialog] = useState(null);
 
   useEffect(() => {
     console.log('Fetching Roles');
-    setLocalRoles(roles);
-    setOriginalLocalRoles(roles);
+    const fetchData = async () => {
+      let roles = [];
+      const config = {
+        method: 'get',
+        url: `${process.env.REACT_APP_API_URL}/role`,
+        headers: {
+          Authorization: '{{TOKEN}}'
+        }
+      };
+      await axios(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+          roles = response.data;
+          setDialog(null);
+        })
+        .catch((error) => {
+          console.log(error);
+          setDialog(
+            <Alert severity="error">
+              <AlertTitle>
+                info
+              </AlertTitle>
+              message:
+              <br />
+              <strong>
+                Error fetching data, please try later or contact support.
+              </strong>
+            </Alert>
+          );
+        });
+      setLocalRoles(roles);
+      setOriginalLocalRoles(roles);
+    };
+    fetchData();
   }, []);
 
   const handleSearchData = (data) => {
@@ -31,10 +69,15 @@ const Roles = () => {
     setSelectedData(newSelectedData);
   };
 
+  const handleApiAction = (response) => {
+    console.log(response);
+    window.location.reload();
+  };
+
   return (
     <>
       <Helmet>
-        <title>Sites</title>
+        <title>Roles</title>
       </Helmet>
       <Box
         sx={{
@@ -44,7 +87,8 @@ const Roles = () => {
         }}
       >
         <Container maxWidth={false}>
-          <RoleListToolbar handleSearchData={handleSearchData} handleSelectedData={selectedData} />
+          <RoleListToolbar handleSearchData={handleSearchData} handleSelectedData={selectedData} handleApiAction={handleApiAction} />
+          {dialog}
           <Box sx={{ pt: 3 }}>
             <RoleListResults data={localRoles} handleSelectedData={handleSelectedData} />
           </Box>
