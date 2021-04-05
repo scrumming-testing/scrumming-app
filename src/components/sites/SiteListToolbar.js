@@ -25,7 +25,7 @@ const SiteListToolbar = (props) => {
   const [disableProjects, setDisableProjects] = useState(true);
   const [elementsIDs, setElementsIDs] = useState([]);
 
-  const { handleSearchData, handleSelectedData } = props;
+  const { handleSearchData, handleSelectedData, handleApiAction } = props;
 
   useEffect(() => {
     setDialog(null);
@@ -48,8 +48,9 @@ const SiteListToolbar = (props) => {
     setElementsIDs(handleSelectedData);
   }, [handleSelectedData]);
 
-  const unmountDialog = () => {
+  const unmountDialog = (message) => {
     setDialog(null);
+    handleApiAction(message);
   };
 
   const openCreateDialog = () => {
@@ -164,6 +165,7 @@ const SiteListToolbar = (props) => {
 SiteListToolbar.propTypes = {
   handleSearchData: PropTypes.func.isRequired,
   handleSelectedData: PropTypes.array.isRequired,
+  handleApiAction: PropTypes.func.isRequired,
 };
 
 export default SiteListToolbar;

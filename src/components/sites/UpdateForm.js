@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
+  Avatar,
   DialogContentText,
   TextField,
+  makeStyles,
+  List,
+  ListItem,
+  ListItemText,
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -12,7 +17,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
 
-import sites from '../../__mocks__/sites';
+import getInitials from 'src/utils/getInitials';
+import axios from 'axios';
+import { v4 as uuid } from 'uuid';
+// import sites from '../../__mocks__/sites';
 
 function PaperComponent(props) {
   return (
@@ -25,28 +33,48 @@ function PaperComponent(props) {
   );
 }
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper,
+  },
+}));
+
 export default function UpdateForm({ formClosed, elementId }) {
   const [values, setValues] = React.useState({
     name: '',
   });
   const [open, setOpen] = useState(true);
+  const classes = useStyles();
 
   useEffect(() => {
     console.log('Dialog Update Opened');
     console.log('Fetching Site Data');
     console.log(elementId);
-    const site = sites.find((s) => s.id === elementId);
-
-    if (site !== undefined) {
-      console.log('Found site');
-      console.log(site);
-      setValues((prevState) => {
-        const siteData = { ...prevState };
-        siteData.name = site.name;
-        siteData.id = site.id;
-        return { ...siteData };
+    const config = {
+      method: 'get',
+      url: `${process.env.REACT_APP_API_URL}/site/search/id/${elementId}`,
+      headers: {
+        Authorization: '{{TOKEN}}'
+      }
+    };
+    axios(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        const site = response.data;
+        setValues((prevState) => {
+          const siteData = { ...prevState };
+          siteData.name = site.name;
+          siteData.id = site.id;
+          return { ...siteData };
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        formClosed('Error while trying organization update');
+        setOpen(false);
       });
-    }
   }, []);
 
   const handleClose = () => {
@@ -57,6 +85,25 @@ export default function UpdateForm({ formClosed, elementId }) {
   const update = () => {
     console.log('[+] UPDATING Site');
     console.log(values);
+    const config = {
+      method: 'patch',
+      url: `${process.env.REACT_APP_API_URL}/site/${elementId}`,
+      headers: {
+        Authorization: '{{TOKEN}}',
+        'Content-Type': 'application/json',
+      },
+      data: values
+    };
+    axios(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        formClosed({ status: response.status, id: uuid() });
+      })
+      .catch((error) => {
+        console.log(error);
+        formClosed('Error while trying site update');
+      });
+    setOpen(false);
   };
 
   const handleChange = (prop) => (event) => {
@@ -77,6 +124,17 @@ export default function UpdateForm({ formClosed, elementId }) {
         </DialogContentText>
       </DialogTitle>
       <DialogContent>
+        <List className={classes.root}>
+          <ListItem>
+            <Avatar
+              src={values.avatarUrl}
+              sx={{ mr: 2 }}
+            >
+              {getInitials(values.name)}
+            </Avatar>
+            <ListItemText primary={`Site : ${values.name}`} />
+          </ListItem>
+        </List>
         <TextField
           autoFocus
           margin="dense"

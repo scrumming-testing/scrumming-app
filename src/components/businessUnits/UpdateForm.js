@@ -133,7 +133,7 @@ export default function UpdateForm({ formClosed, elementId }) {
             >
               {getInitials(values.name)}
             </Avatar>
-            <ListItemText primary={`ORGANIZATION : ${values.name}`} />
+            <ListItemText primary={`Business Unit : ${values.name}`} />
           </ListItem>
         </List>
         <TextField

@@ -30,6 +30,7 @@ const Organizations = () => {
         console.log(JSON.stringify(response.data));
         setOrganizations(response.data);
         setOriginalLocalOrganizations(response.data);
+        setDialog(null);
       })
       .catch((error) => {
         console.log(error);
