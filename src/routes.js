@@ -10,8 +10,12 @@ import ProductList from 'src/pages/ProductList';
 import Register from 'src/pages/Register';
 import Settings from 'src/pages/Settings';
 import User from 'src/pages/User';
-import Roles from './pages/Roles';
+import Roles from 'src/pages/Roles';
+import Organizations from 'src/pages/Organizations';
+import BusinessUnits from 'src/pages/BusinessUnits';
+import Sites from 'src/pages/Sites';
 
+/* eslint-disable react/prop-types */
 const routes = [
   {
     path: 'app',
@@ -24,6 +28,9 @@ const routes = [
       { path: 'settings', element: <Settings /> },
       { path: 'users', element: <User /> },
       { path: 'roles', element: <Roles /> },
+      { path: 'organizations', element: <Organizations /> },
+      { path: 'organizations/:organizationID/business-unit/', element: <BusinessUnits /> },
+      { path: 'organizations/:organizationID/business-unit/:businessUnitID/sites', element: <Sites /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
