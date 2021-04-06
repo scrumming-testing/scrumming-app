@@ -55,9 +55,14 @@ const Sites = () => {
             </Alert>
           );
         });
-      const aux = sites.filter((site) => site.businessUnitId === businessUnitID);
-      setLocalSites(aux);
-      setOriginalLocalSites(aux);
+      if (businessUnitID !== undefined) {
+        const aux = sites.filter((site) => site.businessUnitId === businessUnitID);
+        setLocalSites(aux);
+        setOriginalLocalSites(aux);
+      } else {
+        setLocalSites(sites);
+        setOriginalLocalSites(sites);
+      }
     };
     fetchData();
   }, []);

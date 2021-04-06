@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   DialogContentText,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -29,11 +32,46 @@ export default function CreateForm({ formClosed }) {
   const { businessUnitID } = useParams();
   const [values, setValues] = React.useState({
     name: '',
+    businessUnit: ''
   });
   const [open, setOpen] = useState(true);
+  const [BusinessUnitsForm, setBusinessUnitsForm] = useState(false);
+  const [businessUnitsData, setBusinessUnitsData] = useState([]);
 
   useEffect(() => {
     console.log('Dialog Create Opened');
+    const fetchBusinessUnitData = async () => {
+      let businessUnits = [];
+      const config = {
+        method: 'get',
+        url: `${process.env.REACT_APP_API_URL}/business-unit`,
+        headers: {
+          Authorization: '{{TOKEN}}'
+        }
+      };
+      await axios(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+          businessUnits = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          formClosed(error);
+          setOpen(false);
+        });
+      setBusinessUnitsForm(true);
+      setBusinessUnitsData(businessUnits);
+    };
+    if (businessUnitID === undefined) {
+      fetchBusinessUnitData();
+    } else {
+      setValues((prevState) => {
+        const siteData = { ...prevState };
+        siteData.name = '';
+        siteData.businessUnit = businessUnitID;
+        return { ...siteData };
+      });
+    }
   }, []);
 
   const handleClose = () => {
@@ -47,7 +85,7 @@ export default function CreateForm({ formClosed }) {
     console.log(businessUnitID);
     const data = JSON.stringify({
       name: values.name,
-      businessUnit: businessUnitID
+      businessUnit: values.businessUnit
     });
     const config = {
       method: 'post',
@@ -97,6 +135,31 @@ export default function CreateForm({ formClosed }) {
           fullWidth
           onChange={handleChange('name')}
         />
+        {
+          BusinessUnitsForm
+            ? (
+              <>
+                <InputLabel htmlFor="business-units">
+                  Organization
+                </InputLabel>
+                <Select
+                  value={values.businessUnit}
+                  fullWidth
+                  onChange={handleChange('businessUnit')}
+                  inputProps={{
+                    name: 'business-units',
+                    id: 'business-units',
+                  }}
+                >
+                  {businessUnitsData.map((e) => (
+                    <MenuItem key={`b-unit-${e.id}`} value={e.id}>{`${e.name}`}</MenuItem>
+                  ))}
+                </Select>
+              </>
+            )
+            : null
+
+        }
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={handleClose} color="primary">

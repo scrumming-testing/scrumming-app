@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   DialogContentText,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -29,11 +32,46 @@ export default function CreateForm({ formClosed }) {
   const { organizationID } = useParams();
   const [values, setValues] = React.useState({
     name: '',
+    organization: ''
   });
   const [open, setOpen] = useState(true);
+  const [organizationForm, setOrganizationForm] = useState(false);
+  const [organizationsData, setOrganizationsData] = useState([]);
 
   useEffect(() => {
     console.log('Dialog Create Opened');
+    const fetchOrganizationsData = async () => {
+      let organizations = [];
+      const config = {
+        method: 'get',
+        url: `${process.env.REACT_APP_API_URL}/organization`,
+        headers: {
+          Authorization: '{{TOKEN}}'
+        }
+      };
+      await axios(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+          organizations = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          formClosed(error);
+          setOpen(false);
+        });
+      setOrganizationForm(true);
+      setOrganizationsData(organizations);
+    };
+    if (organizationID === undefined) {
+      fetchOrganizationsData();
+    } else {
+      setValues((prevState) => {
+        const bUnitData = { ...prevState };
+        bUnitData.name = '';
+        bUnitData.organization = organizationID;
+        return { ...bUnitData };
+      });
+    }
   }, []);
 
   const handleClose = () => {
@@ -47,7 +85,7 @@ export default function CreateForm({ formClosed }) {
     console.log(organizationID);
     const data = JSON.stringify({
       name: values.name,
-      organization: organizationID
+      organization: values.organization
     });
     const config = {
       method: 'post',
@@ -83,7 +121,7 @@ export default function CreateForm({ formClosed }) {
     >
       <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
         <DialogContentText>
-          You are creating an organization
+          You are creating a business unit
         </DialogContentText>
       </DialogTitle>
       <DialogContent>
@@ -97,6 +135,31 @@ export default function CreateForm({ formClosed }) {
           fullWidth
           onChange={handleChange('name')}
         />
+        {
+          organizationForm
+            ? (
+              <>
+                <InputLabel htmlFor="organizations">
+                  Organization
+                </InputLabel>
+                <Select
+                  value={values.organization}
+                  fullWidth
+                  onChange={handleChange('organization')}
+                  inputProps={{
+                    name: 'organizations',
+                    id: 'organizations',
+                  }}
+                >
+                  {organizationsData.map((e) => (
+                    <MenuItem key={`organization-${e.id}`} value={e.id}>{`${e.name}`}</MenuItem>
+                  ))}
+                </Select>
+              </>
+            )
+            : null
+
+        }
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={handleClose} color="primary">

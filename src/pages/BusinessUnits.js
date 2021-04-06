@@ -23,6 +23,7 @@ const BusinessUnits = () => {
   const [dialog, setDialog] = useState(null);
 
   useEffect(() => {
+    console.log(organizationID);
     const fetchData = async () => {
       let businessUnits = [];
       const config = {
@@ -53,9 +54,14 @@ const BusinessUnits = () => {
             </Alert>
           );
         });
-      const aux = businessUnits.filter((unit) => unit.organizationId === organizationID);
-      setLocalBusinessUnits(aux);
-      setOriginalLocalBusinessUnits(aux);
+      if (organizationID !== undefined) {
+        const aux = businessUnits.filter((unit) => unit.organizationId === organizationID);
+        setLocalBusinessUnits(aux);
+        setOriginalLocalBusinessUnits(aux);
+      } else {
+        setLocalBusinessUnits(businessUnits);
+        setOriginalLocalBusinessUnits(businessUnits);
+      }
     };
     fetchData();
   }, []);

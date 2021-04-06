@@ -73,7 +73,7 @@ const BusinessListToolbar = (props) => {
     console.log('Redirecting to B unit dashboard');
     console.log(elementsIDs[0]);
     const businessID = elementsIDs[0];
-    navigate(`${businessID}/sites`);
+    navigate(`/app/business-units/${businessID}/sites`, { replace: true });
   };
 
   return (
@@ -129,7 +129,7 @@ const BusinessListToolbar = (props) => {
           variant="contained"
           onClick={openCreateDialog}
         >
-          Add organization
+          Add Business Unit
         </Button>
       </Box>
       <Box sx={{ mt: 3 }}>

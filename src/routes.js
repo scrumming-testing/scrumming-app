@@ -29,8 +29,10 @@ const routes = [
       { path: 'users', element: <User /> },
       { path: 'roles', element: <Roles /> },
       { path: 'organizations', element: <Organizations /> },
+      { path: 'sites', element: <Sites /> },
+      { path: 'business-units', element: <BusinessUnits /> },
       { path: 'organizations/:organizationID/business-unit/', element: <BusinessUnits /> },
-      { path: 'organizations/:organizationID/business-unit/:businessUnitID/sites', element: <Sites /> },
+      { path: 'business-units/:businessUnitID/sites', element: <Sites /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },

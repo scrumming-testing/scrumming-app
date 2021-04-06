@@ -83,6 +83,9 @@ const BusinessListResults = ({ data, handleSelectedData, ...rest }) => {
                 <TableCell>
                   Name
                 </TableCell>
+                <TableCell>
+                  Organization
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -117,6 +120,21 @@ const BusinessListResults = ({ data, handleSelectedData, ...rest }) => {
                         variant="body1"
                       >
                         {`${element.name}`}
+                      </Typography>
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Box
+                      sx={{
+                        alignItems: 'center',
+                        display: 'flex'
+                      }}
+                    >
+                      <Typography
+                        color="textPrimary"
+                        variant="body1"
+                      >
+                        {`${element.organization.name}`}
                       </Typography>
                     </Box>
                   </TableCell>

@@ -27,17 +27,27 @@ const items = [
   {
     href: '/app/organizations',
     icon: TagIcon,
-    title: 'Organizations Scrumming'
+    title: 'Organizations'
   },
   {
     href: '/app/users',
     icon: UserIcon,
-    title: 'Account Scrumming'
+    title: 'Account'
   },
   {
     href: '/app/roles',
     icon: UserIcon,
-    title: 'Roles Scrumming'
+    title: 'Roles'
+  },
+  {
+    href: '/app/sites',
+    icon: UserIcon,
+    title: 'Sites'
+  },
+  {
+    href: '/app/business-units',
+    icon: UserIcon,
+    title: 'Business Units'
   },
 ];
 
