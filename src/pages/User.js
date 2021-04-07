@@ -64,7 +64,9 @@ const User = () => {
     if (data !== '') {
       const aux = originalUsers.filter((user) => {
         const name = `${user.firstName} ${user.lastName}`;
-        return name.toLowerCase().match(data);
+        const { email, site } = user;
+        const siteName = site.name;
+        return name.toLowerCase().match(data) || email.toLowerCase().match(data) || siteName.toLowerCase().match(data);
       });
       setLocalUsers(aux);
     } else {

@@ -140,7 +140,7 @@ export default function CreateForm({ formClosed }) {
             ? (
               <>
                 <InputLabel htmlFor="business-units">
-                  Organization
+                  Business Unit
                 </InputLabel>
                 <Select
                   value={values.businessUnit}
