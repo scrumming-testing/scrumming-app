@@ -9,12 +9,14 @@ import OrganizationListResults from 'src/components/organization/OrganizationLis
 import OrganizationListToolbar from 'src/components/organization/OrganizationListToolbar';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { v4 as uuid } from 'uuid';
 
 const Organizations = () => {
   const [localOrganizations, setOrganizations] = useState([]);
   const [originalOrganizations, setOriginalLocalOrganizations] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
   const [dialog, setDialog] = useState(null);
+  const [apiAction, setApiAction] = useState('');
 
   useEffect(() => {
     const config = {
@@ -47,7 +49,7 @@ const Organizations = () => {
           </Alert>
         );
       });
-  }, []);
+  }, [apiAction]);
 
   const handleSearchData = (data) => {
     if (data !== '') {
@@ -65,7 +67,8 @@ const Organizations = () => {
 
   const handleApiAction = (response) => {
     console.log(response);
-    window.location.reload();
+    setApiAction(uuid());
+    // window.location.reload();
   };
 
   return (
@@ -84,7 +87,7 @@ const Organizations = () => {
           <OrganizationListToolbar handleSearchData={handleSearchData} handleSelectedData={selectedData} handleApiAction={handleApiAction} />
           {dialog}
           <Box sx={{ pt: 3 }}>
-            <OrganizationListResults data={localOrganizations} handleSelectedData={handleSelectedData} />
+            <OrganizationListResults data={localOrganizations} handleSelectedData={handleSelectedData} resetSelected={apiAction} />
           </Box>
         </Container>
       </Box>

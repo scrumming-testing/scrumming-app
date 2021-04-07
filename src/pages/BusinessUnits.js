@@ -13,6 +13,7 @@ import BusinessListToolbar from 'src/components/businessUnits/BusinessListToolba
 // import businessUnits from '../__mocks__/businessUnits';
 
 import axios from 'axios';
+import { v4 as uuid } from 'uuid';
 
 const BusinessUnits = () => {
   const { organizationID } = useParams();
@@ -21,6 +22,7 @@ const BusinessUnits = () => {
   const [originalBusinessUnits, setOriginalLocalBusinessUnits] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
   const [dialog, setDialog] = useState(null);
+  const [apiAction, setApiAction] = useState('');
 
   useEffect(() => {
     console.log(organizationID);
@@ -64,7 +66,7 @@ const BusinessUnits = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [apiAction]);
 
   const handleSearchData = (data) => {
     if (data !== '') {
@@ -81,7 +83,8 @@ const BusinessUnits = () => {
 
   const handleApiAction = (response) => {
     console.log(response);
-    window.location.reload();
+    setApiAction(uuid());
+    // window.location.reload();
   };
 
   return (
@@ -100,7 +103,7 @@ const BusinessUnits = () => {
           <BusinessListToolbar handleSearchData={handleSearchData} handleSelectedData={selectedData} handleApiAction={handleApiAction} />
           {dialog}
           <Box sx={{ pt: 3 }}>
-            <BusinessListResults data={localBusinessUnits} handleSelectedData={handleSelectedData} />
+            <BusinessListResults data={localBusinessUnits} handleSelectedData={handleSelectedData} resetSelected={apiAction} />
           </Box>
         </Container>
       </Box>

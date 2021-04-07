@@ -13,6 +13,7 @@ import SiteListToolbar from 'src/components/sites/SiteListToolbar';
 // import sites from '../__mocks__/sites';
 
 import axios from 'axios';
+import { v4 as uuid } from 'uuid';
 
 const Sites = () => {
   const { businessUnitID } = useParams();
@@ -21,6 +22,7 @@ const Sites = () => {
   const [localSites, setLocalSites] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
   const [dialog, setDialog] = useState(null);
+  const [apiAction, setApiAction] = useState('');
 
   useEffect(() => {
     console.log('Fetching Sites');
@@ -65,7 +67,7 @@ const Sites = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [apiAction]);
 
   const handleSearchData = (data) => {
     if (data !== '') {
@@ -82,7 +84,8 @@ const Sites = () => {
 
   const handleApiAction = (response) => {
     console.log(response);
-    window.location.reload();
+    setApiAction(uuid());
+    // window.location.reload();
   };
 
   return (
@@ -101,7 +104,7 @@ const Sites = () => {
           <SiteListToolbar handleSearchData={handleSearchData} handleSelectedData={selectedData} handleApiAction={handleApiAction} />
           {dialog}
           <Box sx={{ pt: 3 }}>
-            <SiteListResults data={localSites} handleSelectedData={handleSelectedData} />
+            <SiteListResults data={localSites} handleSelectedData={handleSelectedData} resetSelected={apiAction} />
           </Box>
         </Container>
       </Box>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
@@ -16,10 +16,18 @@ import {
 } from '@material-ui/core';
 import getInitials from 'src/utils/getInitials';
 
-const BusinessListResults = ({ data, handleSelectedData, ...rest }) => {
+const BusinessListResults = ({
+  data, handleSelectedData, resetSelected, ...rest
+}) => {
   const [selectedDataIds, setSelectedDataIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    console.log('ACTION');
+    setSelectedDataIds([]);
+    handleSelectedData([]);
+  }, [resetSelected]);
 
   const handleSelectAll = (event) => {
     let newSelectedDataIds;
@@ -160,6 +168,7 @@ const BusinessListResults = ({ data, handleSelectedData, ...rest }) => {
 BusinessListResults.propTypes = {
   data: PropTypes.array.isRequired,
   handleSelectedData: PropTypes.func.isRequired,
+  resetSelected: PropTypes.string.isRequired,
 };
 
 export default BusinessListResults;

@@ -10,6 +10,7 @@ import AccountListToolbar from 'src/components/account-scrumming/AccountListTool
 
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { v4 as uuid } from 'uuid';
 
 // import users from 'src/__mocks__/users';
 
@@ -17,11 +18,11 @@ const User = () => {
   const [localUsers, setLocalUsers] = useState([]);
   const [originalUsers, setOriginalUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [apiAction, setApiAction] = useState('');
 
   const [dialog, setDialog] = useState(null);
 
   useEffect(() => {
-    // setUsers(users);
     console.log('Fetching Users');
     const fetchData = async () => {
       let users = [];
@@ -57,7 +58,7 @@ const User = () => {
       setOriginalUsers(users);
     };
     fetchData();
-  }, []);
+  }, [apiAction]);
 
   const handleSearchData = (data) => {
     if (data !== '') {
@@ -77,7 +78,8 @@ const User = () => {
 
   const handleApiAction = (response) => {
     console.log(response);
-    window.location.reload();
+    setApiAction(uuid());
+    // window.location.reload();
   };
 
   return (
@@ -96,7 +98,7 @@ const User = () => {
           <AccountListToolbar handleSearchData={handleSearchData} handleSelectedUsers={selectedUsers} handleApiAction={handleApiAction} />
           {dialog}
           <Box sx={{ pt: 3 }}>
-            <AccountListResults users={localUsers} handleSelectedUsers={handleSelectedUsers} />
+            <AccountListResults users={localUsers} handleSelectedUsers={handleSelectedUsers} resetSelected={apiAction} />
           </Box>
         </Container>
       </Box>

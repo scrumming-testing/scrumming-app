@@ -142,6 +142,7 @@ export default function UpdateForm({ formClosed, userId }) {
       role: values.role,
       avatar: profileImage
     });
+    console.log(data);
     const config = {
       method: 'patch',
       url: `${process.env.REACT_APP_API_URL}/user/${userId}`,

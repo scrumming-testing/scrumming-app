@@ -10,6 +10,7 @@ import RoleListResults from 'src/components/roles/RoleListResults';
 import RoleListToolbar from 'src/components/roles/RoleListToolbar';
 
 import axios from 'axios';
+import { v4 as uuid } from 'uuid';
 
 const Roles = () => {
   const [originalRoles, setOriginalLocalRoles] = useState([]);
@@ -17,6 +18,7 @@ const Roles = () => {
   const [localRoles, setLocalRoles] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
   const [dialog, setDialog] = useState(null);
+  const [apiAction, setApiAction] = useState('');
 
   useEffect(() => {
     console.log('Fetching Roles');
@@ -54,7 +56,7 @@ const Roles = () => {
       setOriginalLocalRoles(roles);
     };
     fetchData();
-  }, []);
+  }, [apiAction]);
 
   const handleSearchData = (data) => {
     if (data !== '') {
@@ -71,7 +73,8 @@ const Roles = () => {
 
   const handleApiAction = (response) => {
     console.log(response);
-    window.location.reload();
+    setApiAction(uuid());
+    // window.location.reload();
   };
 
   return (
@@ -90,7 +93,7 @@ const Roles = () => {
           <RoleListToolbar handleSearchData={handleSearchData} handleSelectedData={selectedData} handleApiAction={handleApiAction} />
           {dialog}
           <Box sx={{ pt: 3 }}>
-            <RoleListResults data={localRoles} handleSelectedData={handleSelectedData} />
+            <RoleListResults data={localRoles} handleSelectedData={handleSelectedData} resetSelected={apiAction} />
           </Box>
         </Container>
       </Box>

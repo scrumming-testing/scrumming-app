@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -17,10 +17,18 @@ import {
 } from '@material-ui/core';
 import getInitials from 'src/utils/getInitials';
 
-const AccountListResults = ({ users, handleSelectedUsers, ...rest }) => {
+const AccountListResults = ({
+  users, handleSelectedUsers, resetSelected, ...rest
+}) => {
   const [selectedUsersIds, setSelectedUsersIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    console.log('ACTION');
+    setSelectedUsersIds([]);
+    handleSelectedUsers([]);
+  }, [resetSelected]);
 
   const handleSelectAll = (event) => {
     let newSelectedUsersIds;
@@ -167,6 +175,7 @@ const AccountListResults = ({ users, handleSelectedUsers, ...rest }) => {
 AccountListResults.propTypes = {
   users: PropTypes.array.isRequired,
   handleSelectedUsers: PropTypes.func.isRequired,
+  resetSelected: PropTypes.string.isRequired,
 };
 
 export default AccountListResults;
