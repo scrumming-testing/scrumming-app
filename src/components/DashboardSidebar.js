@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
@@ -17,11 +18,13 @@ import {
 } from 'react-feather';
 import NavItem from './NavItem';
 
-const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith'
-};
+/*
+  const user = {
+    avatar: '/static/images/avatars/avatar_6.png',
+    jobTitle: 'Senior Developer',
+    name: 'Katarina Smith'
+  };
+*/
 
 const items = [
   {
@@ -54,7 +57,45 @@ const items = [
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
   const location = useLocation();
 
+  const [user, setUser] = useState({
+    avatar: '',
+    name: '',
+    email: '',
+    site: '',
+    id: ''
+  });
+
   useEffect(() => {
+    const fetchUser = async () => {
+      // 1- FETCH ID FROM LOCAL STORAGE
+      const userEmail = 'santiago.villalobos@alumnos.udg.mx';
+      // 2- FETCH DATA FROM SERVER
+      const config = {
+        method: 'get',
+        url: `${process.env.REACT_APP_API_URL}/user/search/email/${userEmail}`,
+        headers: {
+          Authorization: '{{TOKEN}}'
+        }
+      };
+      await axios(config)
+        .then((response) => {
+          console.log(response.data);
+          const fetchedUser = response.data;
+          setUser((prevState) => {
+            const userData = { ...prevState };
+            userData.name = `${fetchedUser.firstName} ${fetchedUser.lastName}`;
+            userData.avatar = fetchedUser.avatar;
+            userData.email = fetchedUser.email;
+            userData.site = fetchedUser.site.name;
+            userData.id = fetchedUser.id;
+            return { ...userData };
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    fetchUser();
     if (openMobile && onMobileClose) {
       onMobileClose();
     }
@@ -96,7 +137,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           color="textSecondary"
           variant="body2"
         >
-          {user.jobTitle}
+          {user.site}
         </Typography>
       </Box>
       <Divider />
