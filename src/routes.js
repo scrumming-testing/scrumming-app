@@ -14,6 +14,7 @@ import Roles from 'src/pages/Roles';
 import Organizations from 'src/pages/Organizations';
 import BusinessUnits from 'src/pages/BusinessUnits';
 import Sites from 'src/pages/Sites';
+import Home from './pages/Home';
 
 /* eslint-disable react/prop-types */
 const routes = [
@@ -43,7 +44,7 @@ const routes = [
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
       { path: '404', element: <NotFound /> },
-      { path: '/', element: <Navigate to="/app/dashboard" /> },
+      { path: '/', element: <Home /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   }
