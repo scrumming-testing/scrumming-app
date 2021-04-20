@@ -6,10 +6,16 @@ import {
 } from '@material-ui/core';
 import AccountProfile from 'src/components/account/AccountProfile';
 import Badges from 'src/components/account/Badges';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useAuth0 } from '@auth0/auth0-react';
+// import { useEffect, useState } from 'react';
+// import axios from 'axios';
 
 const Account = () => {
+  const { user, isAuthenticated } = useAuth0();
+  console.log('[+]user');
+  console.log(user);
+  console.log(isAuthenticated);
+  /*
   const [user, setUser] = useState({
     avatar: '',
     name: '',
@@ -51,6 +57,7 @@ const Account = () => {
     console.log('object');
     fetchUser();
   }, []);
+  */
 
   return (
     <>

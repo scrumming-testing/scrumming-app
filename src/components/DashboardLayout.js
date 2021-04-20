@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
 import { experimentalStyled } from '@material-ui/core';
 import DashboardNavbar from './DashboardNavbar';
 import DashboardSidebar from './DashboardSidebar';
@@ -11,18 +12,6 @@ const DashboardLayoutRoot = experimentalStyled('div')(
     height: '100%',
     overflow: 'hidden',
     width: '100%'
-  })
-);
-
-const DashboardLayoutWrapper = experimentalStyled('div')(
-  ({ theme }) => ({
-    display: 'flex',
-    flex: '1 1 auto',
-    overflow: 'hidden',
-    paddingTop: 64,
-    [theme.breakpoints.up('lg')]: {
-      paddingLeft: 256
-    }
   })
 );
 
@@ -40,14 +29,33 @@ const DashboardLayoutContent = experimentalStyled('div')({
 
 const DashboardLayout = () => {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
+  const { isAuthenticated } = useAuth0();
+
+  const DashboardLayoutWrapper = experimentalStyled('div')(
+    ({ theme }) => ({
+      display: 'flex',
+      flex: '1 1 auto',
+      overflow: 'hidden',
+      paddingTop: 64,
+      [theme.breakpoints.up('lg')]: {
+        paddingLeft: isAuthenticated ? 256 : 0
+      }
+    })
+  );
 
   return (
     <DashboardLayoutRoot>
       <DashboardNavbar onMobileNavOpen={() => setMobileNavOpen(true)} />
-      <DashboardSidebar
-        onMobileClose={() => setMobileNavOpen(false)}
-        openMobile={isMobileNavOpen}
-      />
+      {
+        isAuthenticated
+          ? (
+            <DashboardSidebar
+              onMobileClose={() => setMobileNavOpen(false)}
+              openMobile={isMobileNavOpen}
+            />
+          )
+          : null
+      }
       <DashboardLayoutWrapper>
         <DashboardLayoutContainer>
           <DashboardLayoutContent>

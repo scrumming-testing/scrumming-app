@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect } from 'react';
+// import axios from 'axios';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
+// import { useAuth0 } from '@auth0/auth0-react';
 import {
   Avatar,
   Box,
@@ -56,16 +57,19 @@ const items = [
 
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
   const location = useLocation();
+  // const { user } = useAuth0();
+  // console.log(user);
 
-  const [user, setUser] = useState({
+  const user = {
     avatar: '',
     name: '',
     email: '',
     site: '',
     id: ''
-  });
+  };
 
   useEffect(() => {
+    /*
     const fetchUser = async () => {
       // 1- FETCH ID FROM LOCAL STORAGE
       const userEmail = 'santiago.villalobos@alumnos.udg.mx';
@@ -96,6 +100,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
         });
     };
     fetchUser();
+    */
     if (openMobile && onMobileClose) {
       onMobileClose();
     }
