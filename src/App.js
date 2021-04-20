@@ -14,7 +14,6 @@ const App = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />

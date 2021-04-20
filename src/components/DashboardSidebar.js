@@ -1,38 +1,27 @@
-import { useEffect } from 'react';
-// import axios from 'axios';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-// import { useAuth0 } from '@auth0/auth0-react';
 import {
   Avatar,
   Box,
-  Button,
   Divider,
   Drawer,
   Hidden,
   List,
   Typography
 } from '@material-ui/core';
+import { useAuth0 } from '@auth0/auth0-react';
 import {
   User as UserIcon,
-  Tag as TagIcon
+  Tag as TagIcon,
+  MapPin as MapPinIcon,
+  GitBranch as GitBranchIcon,
+  Shield as ShieldIcon
 } from 'react-feather';
 import NavItem from './NavItem';
 
-/*
-  const user = {
-    avatar: '/static/images/avatars/avatar_6.png',
-    jobTitle: 'Senior Developer',
-    name: 'Katarina Smith'
-  };
-*/
-
 const items = [
-  {
-    href: '/app/organizations',
-    icon: TagIcon,
-    title: 'Organizations'
-  },
   {
     href: '/app/users',
     icon: UserIcon,
@@ -40,39 +29,42 @@ const items = [
   },
   {
     href: '/app/roles',
-    icon: UserIcon,
+    icon: ShieldIcon,
     title: 'Roles'
   },
   {
-    href: '/app/sites',
-    icon: UserIcon,
-    title: 'Sites'
+    href: '/app/organizations',
+    icon: TagIcon,
+    title: 'Organizations'
   },
   {
     href: '/app/business-units',
-    icon: UserIcon,
+    icon: GitBranchIcon,
     title: 'Business Units'
+  },
+  {
+    href: '/app/sites',
+    icon: MapPinIcon,
+    title: 'Sites'
   },
 ];
 
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
   const location = useLocation();
-  // const { user } = useAuth0();
-  // console.log(user);
-
-  const user = {
+  const { user } = useAuth0();
+  const [userApp, setUser] = useState({
     avatar: '',
     name: '',
     email: '',
     site: '',
     id: ''
-  };
+  });
+  console.log(user);
 
   useEffect(() => {
-    /*
     const fetchUser = async () => {
       // 1- FETCH ID FROM LOCAL STORAGE
-      const userEmail = 'santiago.villalobos@alumnos.udg.mx';
+      const userEmail = user.email;
       // 2- FETCH DATA FROM SERVER
       const config = {
         method: 'get',
@@ -100,7 +92,6 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
         });
     };
     fetchUser();
-    */
     if (openMobile && onMobileClose) {
       onMobileClose();
     }
@@ -124,7 +115,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       >
         <Avatar
           component={RouterLink}
-          src={user.avatar}
+          src={userApp.avatar}
           sx={{
             cursor: 'pointer',
             width: 64,
@@ -136,13 +127,13 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           color="textPrimary"
           variant="h5"
         >
-          {user.name}
+          {userApp.name}
         </Typography>
         <Typography
           color="textSecondary"
           variant="body2"
         >
-          {user.site}
+          {userApp.site}
         </Typography>
       </Box>
       <Divider />
@@ -159,43 +150,6 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
         </List>
       </Box>
       <Box sx={{ flexGrow: 1 }} />
-      <Box
-        sx={{
-          backgroundColor: 'background.default',
-          m: 2,
-          p: 2
-        }}
-      >
-        <Typography
-          align="center"
-          gutterBottom
-          variant="h4"
-        >
-          Need more?
-        </Typography>
-        <Typography
-          align="center"
-          variant="body2"
-        >
-          Upgrade to PRO version and access 20 more screens
-        </Typography>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            pt: 2
-          }}
-        >
-          <Button
-            color="primary"
-            component="a"
-            href="https://react-material-kit.devias.io"
-            variant="contained"
-          >
-            See PRO version
-          </Button>
-        </Box>
-      </Box>
     </Box>
   );
 

@@ -7,16 +7,12 @@ import {
 import AccountProfile from 'src/components/account/AccountProfile';
 import Badges from 'src/components/account/Badges';
 import { useAuth0 } from '@auth0/auth0-react';
-// import { useEffect, useState } from 'react';
-// import axios from 'axios';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Account = () => {
-  const { user, isAuthenticated } = useAuth0();
-  console.log('[+]user');
-  console.log(user);
-  console.log(isAuthenticated);
-  /*
-  const [user, setUser] = useState({
+  const { user } = useAuth0();
+  const [userApp, setUser] = useState({
     avatar: '',
     name: '',
     email: '',
@@ -27,7 +23,7 @@ const Account = () => {
   useEffect(() => {
     const fetchUser = async () => {
       // 1- FETCH ID FROM LOCAL STORAGE
-      const userEmail = 'santiago.villalobos@alumnos.udg.mx';
+      const userEmail = user.email;
       // 2- FETCH DATA FROM SERVER
       const config = {
         method: 'get',
@@ -57,7 +53,6 @@ const Account = () => {
     console.log('object');
     fetchUser();
   }, []);
-  */
 
   return (
     <>
@@ -80,15 +75,15 @@ const Account = () => {
               item
               xs={5}
             >
-              <AccountProfile user={user} />
+              <AccountProfile user={userApp} />
             </Grid>
             <Grid
               item
               xs={7}
             >
-              <Badges user={user} />
-              <Badges user={user} />
-              <Badges user={user} />
+              <Badges user={userApp} />
+              <Badges user={userApp} />
+              <Badges user={userApp} />
             </Grid>
           </Grid>
         </Container>
