@@ -10,6 +10,7 @@ import OrganizationListToolbar from 'src/components/organization/OrganizationLis
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
+import { withAuthenticationRequired } from '@auth0/auth0-react';
 
 const Organizations = () => {
   const [localOrganizations, setOrganizations] = useState([]);
@@ -95,4 +96,4 @@ const Organizations = () => {
   );
 };
 
-export default Organizations;
+export default withAuthenticationRequired(Organizations);

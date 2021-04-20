@@ -14,6 +14,7 @@ import SiteListToolbar from 'src/components/sites/SiteListToolbar';
 
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
+import { withAuthenticationRequired } from '@auth0/auth0-react';
 
 const Sites = () => {
   const { businessUnitID } = useParams();
@@ -112,4 +113,4 @@ const Sites = () => {
   );
 };
 
-export default Sites;
+export default withAuthenticationRequired(Sites);

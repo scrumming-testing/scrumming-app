@@ -11,6 +11,7 @@ import RoleListToolbar from 'src/components/roles/RoleListToolbar';
 
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
+import { withAuthenticationRequired } from '@auth0/auth0-react';
 
 const Roles = () => {
   const [originalRoles, setOriginalLocalRoles] = useState([]);
@@ -101,4 +102,4 @@ const Roles = () => {
   );
 };
 
-export default Roles;
+export default withAuthenticationRequired(Roles);

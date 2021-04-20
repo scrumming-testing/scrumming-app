@@ -8,6 +8,7 @@ import {
 import AccountListResults from 'src/components/account-scrumming/AccountListResults';
 import AccountListToolbar from 'src/components/account-scrumming/AccountListToolbar';
 
+import { withAuthenticationRequired } from '@auth0/auth0-react';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
@@ -108,4 +109,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default withAuthenticationRequired(User);

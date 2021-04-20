@@ -14,6 +14,7 @@ import BusinessListToolbar from 'src/components/businessUnits/BusinessListToolba
 
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
+import { withAuthenticationRequired } from '@auth0/auth0-react';
 
 const BusinessUnits = () => {
   const { organizationID } = useParams();
@@ -111,4 +112,4 @@ const BusinessUnits = () => {
   );
 };
 
-export default BusinessUnits;
+export default withAuthenticationRequired(BusinessUnits);
