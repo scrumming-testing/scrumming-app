@@ -10,6 +10,8 @@ import Roles from 'src/pages/Roles';
 import Organizations from 'src/pages/Organizations';
 import BusinessUnits from 'src/pages/BusinessUnits';
 import Sites from 'src/pages/Sites';
+import ProjectsPage from 'src/pages/projects-page/projects-page.component';
+
 import Home from './pages/Home';
 
 /* eslint-disable react/prop-types */
@@ -31,6 +33,7 @@ const routes = [
       { path: 'organizations/:organizationID/business-unit/', element: <BusinessUnits /> },
       { path: 'business-units/:businessUnitID/sites', element: <Sites /> },
       { path: 'home', element: <Home /> },
+      { path: 'projects', element: <ProjectsPage /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
