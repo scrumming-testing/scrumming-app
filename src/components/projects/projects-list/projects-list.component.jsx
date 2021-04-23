@@ -17,6 +17,8 @@ import {
 
 import DateUtil from 'src/utils/date';
 
+const date = new DateUtil();
+
 const ProjectsList = ({ projects, ...rest }) => {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -28,8 +30,6 @@ const ProjectsList = ({ projects, ...rest }) => {
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
   };
-
-  const date = new DateUtil();
 
   return (
     <Card {...rest}>
