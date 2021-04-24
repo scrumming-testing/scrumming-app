@@ -4,13 +4,12 @@
   "licence": "MIT",
   "version": "1.0.0",
   "private": false,
-  "homepage": "https://rauldu.github.io/scrumming-app",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "yarn build",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
