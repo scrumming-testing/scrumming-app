@@ -17,7 +17,8 @@ import {
   Tag as TagIcon,
   MapPin as MapPinIcon,
   GitBranch as GitBranchIcon,
-  Shield as ShieldIcon
+  Shield as ShieldIcon,
+  Book as BookIcon
 } from 'react-feather';
 import NavItem from './NavItem';
 
@@ -46,6 +47,11 @@ const items = [
     href: '/app/sites',
     icon: MapPinIcon,
     title: 'Sites'
+  },
+  {
+    href: '/app/projects',
+    icon: BookIcon,
+    title: 'Projects'
   },
 ];
 
