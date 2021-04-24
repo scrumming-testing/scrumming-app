@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Box, Container } from '@material-ui/core';
+import { withAuthenticationRequired } from '@auth0/auth0-react';
 import projectsMocks from 'src/__mocks__/projects';
 
 import ProjectList from '../../components/projects/projects-list/projects-list.component';
@@ -47,4 +48,4 @@ const ProjectsPage = () => {
   );
 };
 
-export default ProjectsPage;
+export default withAuthenticationRequired(ProjectsPage);
