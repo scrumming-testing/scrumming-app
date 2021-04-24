@@ -114,6 +114,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       <Box
         sx={{
           alignItems: 'center',
+          textAlign: 'center',
           display: 'flex',
           flexDirection: 'column',
           p: 2
